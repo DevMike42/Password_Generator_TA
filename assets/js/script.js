@@ -25,6 +25,12 @@ const getRandomChar = function (arr) {
   return randomItem;
 };
 
+const getRandomIndex = function (arr) {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+
+  return randomIndex;
+};
+
 // Generate password options
 const generatePasswordOptions = function () {
 
@@ -120,21 +126,23 @@ const generatePassword = function () {
 
   // Mixes in at least 1 of each guaranteed char into the result
   for (let i = 0; i < guaranteedChars.length; i++) {
-    result[i] = guaranteedChars[i];
+    let randomIndex = getRandomIndex(result)
+    result[randomIndex] = guaranteedChars[i];
   }
 
   // Returns the result converted to a string
   return result.join('');
 };
 
+// Display password in html
+const displayPassword = function () {
+  const password = generatePassword();
+  const passwordText = document.getElementById('password');
 
+  passwordText.value = password;
+};
 
 
 // Event Listeners
 // ====================================================
-// generateBtn.addEventListener('click', generatePassword);
-
-
-// Function Tests
-// ====================================================
-console.log(generatePassword());
+generateBtn.addEventListener('click', displayPassword);
