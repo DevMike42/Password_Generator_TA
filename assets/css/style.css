@@ -1,4 +1,5 @@
-* {
-  background-color:forestgreen;
-  color: lightgray;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
