@@ -30,9 +30,9 @@ const generatePasswordOptions = function () {
 
   const lengthInput = parseInt(prompt('Enter the number of characters you would like your password to contain'));
 
-  const hasLowerCaseCharsInput = confirm('Click OK to confirm including lowercase characters');
+  const hasLowercaseCharsInput = confirm('Click OK to confirm including lowercase characters');
 
-  const hasUpperCaseCharsInput = confirm('Click OK to confirm including uppercase characters');
+  const hasUppercaseCharsInput = confirm('Click OK to confirm including uppercase characters');
 
   const hasSpecialCharsInput = confirm('Click OK to confirm including special characters');
 
@@ -54,8 +54,8 @@ const generatePasswordOptions = function () {
   }
 
   if (
-    hasLowerCaseCharsInput === false &&
-    hasUpperCaseCharsInput === false &&
+    hasLowercaseCharsInput === false &&
+    hasUppercaseCharsInput === false &&
     hasNumericCharsInput === false &&
     hasSpecialCharsInput === false
   ) {
@@ -67,18 +67,64 @@ const generatePasswordOptions = function () {
     length: lengthInput,
     hasSpecialChars: hasSpecialCharsInput,
     hasNumericChars: hasNumericCharsInput,
-    hasLowerCaseChars: hasLowerCaseCharsInput,
-    hasUpperCaseChars: hasUpperCaseCharsInput
+    hasLowercaseChars: hasLowercaseCharsInput,
+    hasUppercaseChars: hasUppercaseCharsInput
   };
+
+  return passwordOptions;
 };
 
 // Generate password
-const displayPassword = function () {
-  const password = generatePassword();
+const generatePassword = function () {
+  const options = generatePasswordOptions();
 
-  const passwordText = document.querySelector('#password');
+  // Array for storing result
+  const result = [];
 
-  passwordText.value = password;
+  // Array for storing characters to include in password
+  // based on user desired options
+  let possibleCharsArr = [];
+
+  // Array for storing 1 of each type of character to 
+  // ensure that type of character will be included
+  let guaranteedChars = [];
+
+  // Checks each type approved by user and adds chars to each char array
+  if (options.hasLowercaseChars) {
+    possibleCharsArr = possibleCharsArr.concat(lowercaseChars);
+    guaranteedChars.push(getRandomChar(lowercaseChars));
+  }
+
+  if (options.hasUppercaseChars) {
+    possibleCharsArr = possibleCharsArr.concat(uppercaseChars);
+    guaranteedChars.push(getRandomChar(uppercaseChars));
+  }
+
+  if (options.hasNumericChars) {
+    possibleCharsArr = possibleCharsArr.concat(numericChars);
+    guaranteedChars.push(getRandomChar(numericChars));
+  }
+
+  if (options.hasSpecialChars) {
+    possibleCharsArr = possibleCharsArr.concat(specialChars);
+    guaranteedChars.push(getRandomChar(specialChars));
+  }
+
+  // Loop iterates through password length from options object,
+  // selecting random indices from possibleCharsArr and inserts 
+  // them into the password result
+  for (let i = 0; i < options.length; i++) {
+    const possibleChars = getRandomChar(possibleCharsArr);
+    result.push(possibleChars);
+  }
+
+  // Mixes in at least 1 of each guaranteed char into the result
+  for (let i = 0; i < guaranteedChars.length; i++) {
+    result[i] = guaranteedChars[i];
+  }
+
+  // Returns the result converted to a string
+  return result.join('');
 };
 
 
@@ -86,9 +132,9 @@ const displayPassword = function () {
 
 // Event Listeners
 // ====================================================
-generateBtn.addEventListener('click', displayPassword);
+// generateBtn.addEventListener('click', generatePassword);
 
 
 // Function Tests
 // ====================================================
-console.log(generatePasswordOptions());
+console.log(generatePassword());
